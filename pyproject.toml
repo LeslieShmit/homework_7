@@ -13,6 +13,7 @@ pillow = "^12.1.0"
 psycopg2-binary = "^2.9.11"
 dotenv = "^0.9.9"
 docutils = "^0.22.4"
+django-filter = "^25.2"
 
 
 [build-system]
