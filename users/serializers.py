@@ -6,7 +6,14 @@ from users.models import Payment
 User = get_user_model()
 
 
+class PaymentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Payment
+        fields ='__all__'
+
 class UserProfileSerializer(serializers.ModelSerializer):
+    payments = PaymentSerializer(many=True, read_only=True)
+
     class Meta:
         model = User
         fields = (
@@ -14,10 +21,6 @@ class UserProfileSerializer(serializers.ModelSerializer):
             'email',
             'first_name',
             'last_name',
+            'payments',
         )
         read_only_fields = ('id',)
-
-class PaymentSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Payment
-        fields ='__all__'
