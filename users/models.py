@@ -1,3 +1,4 @@
+from config import settings
 from django.utils.timezone import now
 from django.contrib.auth.models import AbstractUser
 from django.db import models
@@ -41,11 +42,11 @@ class Payment(models.Model):
         CASH = 'CASH', 'Наличные'
         BANK = 'BANK', 'Банковский перевод'
 
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='payment', verbose_name='Пользователь')
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='payments', verbose_name='Пользователь')
     payment_date = models.DateTimeField(default=now, verbose_name='Дата оплаты')
-    paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='payment', null=True, blank=True,
+    paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='payments', null=True, blank=True,
                                     verbose_name='Оплаченный курс')
-    paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='payment', null=True, blank=True,
+    paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='payments', null=True, blank=True,
                                     verbose_name='Оплаченный урок')
     payment_amount = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Сумма оплаты')
     payment_method = models.CharField(max_length=4, choices=PaymentMethod.choices, verbose_name='Способ оплаты')
