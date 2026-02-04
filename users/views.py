@@ -7,5 +7,8 @@ User = get_user_model()
 
 
 class UserViewSet(ModelViewSet):
+    """
+    Viewset for :model: 'users.CustomUser'
+    """
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer

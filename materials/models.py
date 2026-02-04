@@ -1,6 +1,9 @@
 from django.db import models
 
 class Lesson(models.Model):
+    """
+    Stores a single lesson.
+    """
     title = models.CharField(max_length=150, verbose_name="Название")
     preview = models.ImageField(upload_to="previews/", blank=True, null=True, verbose_name="Превью")
     description = models.TextField(blank=True, null=True, verbose_name="Описание")
@@ -15,6 +18,9 @@ class Lesson(models.Model):
 
 
 class Course(models.Model):
+    """
+    Stores a single course, which is a group of lessons in fact. Related to :model: 'materials.Lesson'.
+    """
     title = models.CharField(max_length=150, verbose_name="Название")
     preview = models.ImageField(upload_to="previews/", blank=True, null=True, verbose_name="Превью")
     description = models.TextField(blank=True, null=True, verbose_name="Описание")
