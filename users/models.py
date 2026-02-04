@@ -1,5 +1,4 @@
-from tkinter.constants import CASCADE
-
+from django.utils.timezone import now
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -35,7 +34,7 @@ class CustomUser(AbstractUser):
 
 class Payment(models.Model):
     """
-
+    Stores information about a single payment. Related to :model: 'materials.Lesson', model: 'materials.Course' and model: 'users.CustomUser'.
     """
 
     class PaymentMethod(models.TextChoices):
@@ -43,7 +42,7 @@ class Payment(models.Model):
         BANK = 'BANK', 'Банковский перевод'
 
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name='payment', verbose_name='Пользователь')
-    payment_date = models.DateField(verbose_name='Дата оплаты')
+    payment_date = models.DateTimeField(default=now, verbose_name='Дата оплаты')
     paid_course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='payment', null=True, blank=True,
                                     verbose_name='Оплаченный курс')
     paid_lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='payment', null=True, blank=True,
