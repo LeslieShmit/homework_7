@@ -2,9 +2,10 @@ from django.contrib.auth import get_user_model
 from rest_framework.viewsets import ModelViewSet
 from rest_framework import generics
 from django_filters import rest_framework as filters
+from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import Payment
-from .serializers import UserProfileSerializer, PaymentSerializer
+from .serializers import UserProfileSerializer, PaymentSerializer, MyTokenObtainPairSerializer
 
 User = get_user_model()
 
@@ -22,3 +23,6 @@ class PaymentListAPIView(generics.ListAPIView):
     filter_backends = (filters.DjangoFilterBackend, filters.OrderingFilter)
     filterset_fields = ('paid_course', 'paid_lesson', 'payment_method',)
     ordering_filter = ('payment_date',)
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
