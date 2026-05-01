@@ -3,6 +3,7 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework import generics
 from django_filters import rest_framework as filters
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from .models import Payment
 from .serializers import UserProfileSerializer, PaymentSerializer, MyTokenObtainPairSerializer
@@ -16,6 +17,11 @@ class UserViewSet(ModelViewSet):
     """
     queryset = User.objects.all()
     serializer_class = UserProfileSerializer
+
+    def get_permissions(self):
+        if self.action == 'create':
+            return [AllowAny()]
+        return [IsAuthenticated()]
 
 class PaymentListAPIView(generics.ListAPIView):
     serializer_class = PaymentSerializer
