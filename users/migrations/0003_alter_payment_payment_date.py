@@ -7,13 +7,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('users', '0002_payment'),
+        ("users", "0002_payment"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='payment',
-            name='payment_date',
-            field=models.DateTimeField(default=django.utils.timezone.now, verbose_name='Дата оплаты'),
+            model_name="payment",
+            name="payment_date",
+            field=models.DateTimeField(
+                default=django.utils.timezone.now, verbose_name="Дата оплаты"
+            ),
         ),
     ]
