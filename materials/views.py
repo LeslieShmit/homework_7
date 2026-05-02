@@ -93,3 +93,4 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
 
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsNotModerator, IsOwner]
+
