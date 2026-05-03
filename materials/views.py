@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 
 from materials.models import Course, Lesson, Subscription
+from materials.paginators import CustomPagination
 from materials.serializers import CourseSerializer, LessonSerializer
 from users.permissions import IsNotModerator, IsModeratorOrOwner, IsOwner
 
@@ -16,6 +17,7 @@ class CourseViewSet(viewsets.ModelViewSet):
 
     serializer_class = CourseSerializer
     queryset = Course.objects.all()
+    pagination_class = CustomPagination
 
     def perform_create(self, serializer):
         course = serializer.save()
@@ -62,6 +64,7 @@ class LessonListAPIView(generics.ListAPIView):
     serializer_class = LessonSerializer
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsModeratorOrOwner]
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         if self.request.user.groups.filter(name='Moderators').exists():
