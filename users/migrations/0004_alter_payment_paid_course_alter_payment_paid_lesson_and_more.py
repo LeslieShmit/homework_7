@@ -8,24 +8,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('materials', '0001_initial'),
-        ('users', '0003_alter_payment_payment_date'),
+        ("materials", "0001_initial"),
+        ("users", "0003_alter_payment_payment_date"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='payment',
-            name='paid_course',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='payments', to='materials.course', verbose_name='Оплаченный курс'),
+            model_name="payment",
+            name="paid_course",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="payments",
+                to="materials.course",
+                verbose_name="Оплаченный курс",
+            ),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='paid_lesson',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='payments', to='materials.lesson', verbose_name='Оплаченный урок'),
+            model_name="payment",
+            name="paid_lesson",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="payments",
+                to="materials.lesson",
+                verbose_name="Оплаченный урок",
+            ),
         ),
         migrations.AlterField(
-            model_name='payment',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='payments', to=settings.AUTH_USER_MODEL, verbose_name='Пользователь'),
+            model_name="payment",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="payments",
+                to=settings.AUTH_USER_MODEL,
+                verbose_name="Пользователь",
+            ),
         ),
     ]

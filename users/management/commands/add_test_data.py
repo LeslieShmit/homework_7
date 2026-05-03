@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
-from materials.models import Lesson, Course
+
+from materials.models import Course, Lesson
 from users.models import Payment
 
 
@@ -22,18 +23,16 @@ class Command(BaseCommand):
         user.is_staff = False
         user.is_superuser = False
         user.save()
-        lesson_1 = Lesson.objects.create(title='Test_1')
-        lesson_2 = Lesson.objects.create(title='Test_2')
-        course = Course.objects.create(title='Test_course',)
+        lesson_1 = Lesson.objects.create(title="Test_1")
+        lesson_2 = Lesson.objects.create(title="Test_2")
+        course = Course.objects.create(
+            title="Test_course",
+        )
         course.lessons.set([lesson_1, lesson_2])
         Payment.objects.create(
             user=user,
             paid_course=course,
             payment_amount=10000.00,
-            payment_method='CASH'
+            payment_method="CASH",
         )
-        self.stdout.write(
-            self.style.SUCCESS(
-                f"Test data was successfully created."
-            )
-        )
+        self.stdout.write(self.style.SUCCESS(f"Test data was successfully created."))
