@@ -14,16 +14,18 @@ class LessonSerializer(serializers.ModelSerializer):
     class Meta:
         model = Lesson
         fields = "__all__"
+        read_only_fields = ("owner",)
 
 
 class CourseSerializer(serializers.ModelSerializer):
     lessons_count = serializers.SerializerMethodField()
-    lessons_detailed = LessonSerializer(source="lessons", many=True)
+    lessons_detailed = LessonSerializer(source="lessons", many=True, read_only=True)
     is_subscribed = serializers.SerializerMethodField()
 
     class Meta:
         model = Course
         fields = (
+            "id",
             "title",
             "preview",
             "description",
