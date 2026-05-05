@@ -3,12 +3,12 @@ from rest_framework.routers import DefaultRouter
 
 from .views import (CourseViewSet, LessonCreateAPIView, LessonDestroyAPIView,
                     LessonListAPIView, LessonRetrieveAPIView,
-                    LessonUpdateAPIView)
+                    LessonUpdateAPIView, SubscribeView)
 
 app_name = "materials"
 
 router = DefaultRouter()
-router.register(r"courses", CourseViewSet, basename="users")
+router.register(r"courses", CourseViewSet, basename="courses")
 
 urlpatterns = [
     path("lesson/", LessonListAPIView.as_view(), name="lesson_list"),
@@ -16,6 +16,6 @@ urlpatterns = [
     path("lesson/<int:pk>/", LessonRetrieveAPIView.as_view(), name="lesson_get"),
     path("lesson/<int:pk>/edit/", LessonUpdateAPIView.as_view(), name="lesson_edit"),
     path(
-        "lesson/<int:pk>/delete/", LessonDestroyAPIView.as_view(), name="lesson_delete"
-    ),
+        "lesson/<int:pk>/delete/", LessonDestroyAPIView.as_view(), name="lesson_delete",
+    ),path("subscribe/", SubscribeView.as_view(), name="subscribe"),
 ] + router.urls

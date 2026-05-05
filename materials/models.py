@@ -1,3 +1,5 @@
+from tkinter.constants import CASCADE
+
 from django.conf import settings
 from django.db import models
 
@@ -54,3 +56,21 @@ class Course(models.Model):
     class Meta:
         verbose_name = "Курс"
         verbose_name_plural = "Курсы"
+
+class Subscription(models.Model):
+
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name="Курс")
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        verbose_name="Пользователь",
+    )
+
+    def __str__(self):
+        return f"{self.user} {self.course}"
+
+    class Meta:
+        verbose_name = "Подписка"
+        verbose_name_plural = "Подписки"
+        unique_together = ["user", "course"]
+        ordering = ["user"]
