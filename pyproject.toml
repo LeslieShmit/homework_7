@@ -16,6 +16,7 @@ docutils = "^0.22.4"
 django-filter = "^25.2"
 djangorestframework-simplejwt = "^5.5.1"
 drf-yasg = "^1.21.15"
+stripe = "^15.1.0"
 
 
 [tool.poetry.group.dev.dependencies]

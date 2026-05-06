@@ -1,5 +1,6 @@
-from rest_framework.serializers import ValidationError
 from urllib.parse import urlparse
+
+from rest_framework.serializers import ValidationError
 
 
 class LinkValidator:
