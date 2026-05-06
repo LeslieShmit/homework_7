@@ -6,8 +6,11 @@ from rest_framework.viewsets import ModelViewSet
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import Payment
-from .serializers import (MyTokenObtainPairSerializer, PaymentSerializer,
-                          UserProfileSerializer)
+from .serializers import (
+    MyTokenObtainPairSerializer,
+    PaymentSerializer,
+    UserProfileSerializer,
+)
 
 User = get_user_model()
 

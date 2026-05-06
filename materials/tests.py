@@ -16,9 +16,7 @@ class TestCourseLesson(APITestCase):
         self.user.save()
 
         self.course = Course.objects.create(
-            title="Test_Course_1",
-            description="Test_Course_1",
-            owner=self.user
+            title="Test_Course_1", description="Test_Course_1", owner=self.user
         )
 
         self.lesson = Lesson.objects.create(
@@ -81,8 +79,7 @@ class TestCourseLesson(APITestCase):
         }
 
         response = self.client.patch(
-            f"/materials/lesson/{self.lesson.id}/edit/",
-            data=updated_data
+            f"/materials/lesson/{self.lesson.id}/edit/", data=updated_data
         )
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -97,9 +94,7 @@ class TestCourseLesson(APITestCase):
     def test_delete_lesson(self):
         """Тест удаления урока."""
 
-        response = self.client.delete(
-            f"/materials/lesson/{self.lesson.id}/delete/"
-        )
+        response = self.client.delete(f"/materials/lesson/{self.lesson.id}/delete/")
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
 
@@ -109,18 +104,18 @@ class TestCourseLesson(APITestCase):
     def test_subscribe_toggle(self):
         """Тест подписки/отписки."""
 
-        response = self.client.post("/materials/subscribe/", {
-            "course_id": self.course.id
-        })
+        response = self.client.post(
+            "/materials/subscribe/", {"course_id": self.course.id}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertTrue(
             Subscription.objects.filter(user=self.user, course=self.course).exists()
         )
 
-        response = self.client.post("/materials/subscribe/", {
-            "course_id": self.course.id
-        })
+        response = self.client.post(
+            "/materials/subscribe/", {"course_id": self.course.id}
+        )
 
         self.assertEqual(response.status_code, 200)
         self.assertFalse(

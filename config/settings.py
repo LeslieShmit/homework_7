@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     "users",
     "materials",
     "rest_framework_simplejwt",
+    "drf_yasg",
 ]
 
 REST_FRAMEWORK = {

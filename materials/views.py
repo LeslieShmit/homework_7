@@ -27,17 +27,17 @@ class CourseViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         user = self.request.user
 
-        if user.groups.filter(name='Moderators').exists():
+        if user.groups.filter(name="Moderators").exists():
             return Course.objects.all()
 
         return Course.objects.filter(owner=user)
 
     def get_permissions(self):
-        if self.action == 'create':
+        if self.action == "create":
             return [IsAuthenticated(), IsNotModerator()]
-        elif self.action == 'destroy':
+        elif self.action == "destroy":
             return [IsAuthenticated(), IsNotModerator(), IsOwner]
-        elif self.action in ['update', 'retrieve']:
+        elif self.action in ["update", "retrieve"]:
             return [IsAuthenticated(), IsModeratorOrOwner()]
         return [IsAuthenticated()]
 
@@ -67,7 +67,7 @@ class LessonListAPIView(generics.ListAPIView):
     pagination_class = CustomPagination
 
     def get_queryset(self):
-        if self.request.user.groups.filter(name='Moderators').exists():
+        if self.request.user.groups.filter(name="Moderators").exists():
             return Lesson.objects.all()
         return Lesson.objects.filter(owner=self.request.user)
 
@@ -99,6 +99,7 @@ class LessonDestroyAPIView(generics.DestroyAPIView):
 
     queryset = Lesson.objects.all()
     permission_classes = [IsAuthenticated, IsNotModerator, IsOwner]
+
 
 class SubscribeView(APIView):
     """Adding or deleting the subscription"""
