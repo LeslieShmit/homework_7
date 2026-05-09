@@ -155,3 +155,11 @@ REDIS_PORT = os.getenv("REDIS_PORT")
 
 CELERY_BROKER_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
 CELERY_RESULT_BACKEND = f"redis://{REDIS_HOST}:{REDIS_PORT}/0"
+
+
+CELERY_BEAT_SCHEDULE = {
+    "inactive-users-task": {
+        "task": "users.tasks.inactive_users",
+        "schedule": timedelta(days=1),
+    },
+}
