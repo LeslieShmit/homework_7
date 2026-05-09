@@ -6,4 +6,4 @@ from .models import CustomUser
 @admin.register(CustomUser)
 class CustomUser(admin.ModelAdmin):
     exclude = ("password",)
-    list_filter = ('id', 'email')
+    list_filter = ("id", "email")

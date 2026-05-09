@@ -1,5 +1,6 @@
-from rest_framework.serializers import ValidationError
 from urllib.parse import urlparse
+
+from rest_framework.serializers import ValidationError
 
 
 class LinkValidator:
@@ -10,9 +11,7 @@ class LinkValidator:
 
         domain = urlparse(value).netloc.lower()
 
-        allowed_domains = ['youtube.com', 'youtu.be']
+        allowed_domains = ["youtube.com", "youtu.be"]
 
         if not any(domain.endswith(d) for d in allowed_domains):
-            raise ValidationError(
-                "Можно добавлять только ссылки с youtube.com"
-            )
+            raise ValidationError("Можно добавлять только ссылки с youtube.com")

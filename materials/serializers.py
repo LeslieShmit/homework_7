@@ -6,9 +6,7 @@ from materials.validators import LinkValidator
 
 class LessonSerializer(serializers.ModelSerializer):
     video_link = serializers.URLField(
-        required=False,
-        allow_null=True,
-        validators=[LinkValidator()]
+        required=False, allow_null=True, validators=[LinkValidator()]
     )
 
     class Meta:
@@ -38,7 +36,7 @@ class CourseSerializer(serializers.ModelSerializer):
         return instance.lessons.count()
 
     def get_is_subscribed(self, obj):
-        user = self.context['request'].user
+        user = self.context["request"].user
 
         if user.is_anonymous:
             return False
