@@ -8,6 +8,7 @@ from materials.models import Course, Lesson, Subscription
 from materials.paginators import CustomPagination
 from materials.serializers import CourseSerializer, LessonSerializer
 from users.permissions import IsModeratorOrOwner, IsNotModerator, IsOwner
+from .tasks import send_info_about_update_course
 
 
 class CourseViewSet(viewsets.ModelViewSet):
@@ -40,6 +41,14 @@ class CourseViewSet(viewsets.ModelViewSet):
         elif self.action in ["update", "retrieve"]:
             return [IsAuthenticated(), IsModeratorOrOwner()]
         return [IsAuthenticated()]
+
+    def perform_update(self, serializer):
+        course = serializer.save()
+
+        subscriptions = Subscription.objects.filter(course=course)
+
+        for subscription in subscriptions:
+            send_info_about_update_course.delay(subscription.user.email)
 
 
 class LessonCreateAPIView(generics.CreateAPIView):
