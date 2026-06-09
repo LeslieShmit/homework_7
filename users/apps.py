@@ -1,5 +1,10 @@
-from django.apps import AppConfig
+from rest_framework import permissions
 
 
-class UsersConfig(AppConfig):
-    name = "users"
+class IsOwner(permissions.BasePermission):
+    """Метод проверяет, является ли user владельцем."""
+
+    def has_object_permission(self, request, view, obj):
+        if obj.owner == request.user:
+            return True
+        return False
