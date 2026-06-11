@@ -1,9 +1,9 @@
 import os
 import sys
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
-from datetime import timedelta
 
 load_dotenv(override=True)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     "materials",
     "rest_framework_simplejwt",
     "drf_yasg",
-    'django_celery_beat',
+    "django_celery_beat",
 ]
 
 REST_FRAMEWORK = {
