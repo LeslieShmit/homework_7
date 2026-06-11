@@ -1,0 +1,147 @@
+name: Django CI/CD
+
+on: [push, pull_request]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Install flake8
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8
+
+      - name: Run flake8
+        run: flake8 .
+
+  test:
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Install dependencies
+        run: |
+          python3 -m pip install --upgrade pip
+          pip install poetry
+          poetry config virtualenvs.create false
+          poetry install --no-root
+
+      - name: Run tests and coverage tests
+        run: |
+          python manage.py test
+          poetry run coverage run --source='.' manage.py test
+          poetry run coverage report
+        env:
+          SECRET_KEY: test_secret_key
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Create .env.docker file
+        run: |
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env.docker
+          echo "DEBUG=${{ secrets.DEBUG }}" >> .env.docker
+
+          echo "NAME=${{ secrets.NAME }}" >> .env.docker
+          echo "USER=${{ secrets.USER }}" >> .env.docker
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> .env.docker
+          echo "HOST=${{ secrets.HOST }}" >> .env.docker
+          echo "PORT=${{ secrets.PORT }}" >> .env.docker
+
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env.docker
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env.docker
+
+      - name: Log in to Docker Hub
+        run: echo ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_HUB_USERNAME }} --password-stdin
+
+      - name: Build and push Docker images
+        run: |
+          docker compose build
+          docker compose push
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
+      - name: Set up SSH
+        uses: webfactory/ssh-agent@v0.9.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_KEY }}
+
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Create .env.docker file
+        run: |
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env.docker
+          echo "DEBUG=${{ secrets.DEBUG }}" >> .env.docker
+
+          echo "NAME=${{ secrets.NAME }}" >> .env.docker
+          echo "USER=${{ secrets.USER }}" >> .env.docker
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> .env.docker
+          echo "HOST=${{ secrets.HOST }}" >> .env.docker
+          echo "PORT=${{ secrets.PORT }}" >> .env.docker
+
+          echo "REDIS_HOST=${{ secrets.REDIS_HOST }}" >> .env.docker
+          echo "REDIS_PORT=${{ secrets.REDIS_PORT }}" >> .env.docker
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.13"
+
+      - name: Установка необходимых пакетов на сервере
+        run: |
+          ssh -o StrictHostKeyChecking=no -vT ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          sudo apt-get update
+          sudo apt-get install -y python3-venv python3-pip
+          EOF
+
+      - name: Установка зависимостей
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << 'EOF'
+          cd ${{ secrets.DEPLOY_DIR }}
+          sudo apt install curl
+          curl -sSL https://install.python-poetry.org | python3 -
+          poetry env use python3.13
+          poetry config virtualenvs.create true
+          poetry install --no-root
+          EOF
+
+      - name: copy file
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          source: "docker-compose.yml,.env.docker,nginx/nginx.conf"
+          target: ${{ secrets.DEPLOY_DIR }}
+
+      - name: Deploy to server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SERVER_IP }} << EOF
+          cd ${{ secrets.DEPLOY_DIR }}
+          sudo docker compose pull
+          sudo docker compose down --remove-orphans || true
+          sudo docker compose up -d --force-recreate
+          EOF
