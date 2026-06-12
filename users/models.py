@@ -36,7 +36,8 @@ class CustomUser(AbstractUser):
 
 class Payment(models.Model):
     """
-    Stores information about a single payment. Related to :model: 'materials.Lesson', model: 'materials.Course' and model: 'users.CustomUser'.
+    Stores information about a single payment. Related to :model: 'materials.Lesson', model: 'materials.Course'
+    and model: 'users.CustomUser'.
     """
 
     class PaymentMethod(models.TextChoices):

@@ -8,6 +8,7 @@ from materials.models import Course, Lesson, Subscription
 from materials.paginators import CustomPagination
 from materials.serializers import CourseSerializer, LessonSerializer
 from users.permissions import IsModeratorOrOwner, IsNotModerator, IsOwner
+
 from .tasks import send_info_about_update_course
 
 

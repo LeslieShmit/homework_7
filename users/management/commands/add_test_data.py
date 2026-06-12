@@ -35,4 +35,4 @@ class Command(BaseCommand):
             payment_amount=10000.00,
             payment_method="CASH",
         )
-        self.stdout.write(self.style.SUCCESS(f"Test data was successfully created."))
+        self.stdout.write(self.style.SUCCESS("Test data was successfully created."))

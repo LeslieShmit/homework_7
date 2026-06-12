@@ -21,6 +21,8 @@ celery = "^5.6.3"
 eventlet = "^0.41.0"
 redis = "^7.4.0"
 django-celery-beat = "^2.9.0"
+gunicorn = "^26.0.0"
+flake8 = "^7.3.0"
 
 
 [tool.poetry.group.dev.dependencies]
